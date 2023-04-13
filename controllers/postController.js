@@ -77,7 +77,7 @@ export const createPost = asyncHandler(async (req, res) => {
     const { title, category, content } = req.body;
     const post = new Post({
         title: title,
-        category: category,
+        category: category.replace(/\s+/g, "").toLowerCase(),
         content: content,
         author: req.user._id,
         comments: [],
