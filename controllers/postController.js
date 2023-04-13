@@ -36,7 +36,7 @@ export const getPosts = asyncHandler(async (req, res) => {
 export const getPostsByCategory = asyncHandler(async (req, res, next) => {
     const postCategory = req.params.replace(/\s+/g, "").toLowerCase();
     const posts = await Post.find({
-        category: postCategory,
+        category: req.params.replace(/\s+/g, "").toLowerCase(),
     }).exec();
 
     if (!posts) {
