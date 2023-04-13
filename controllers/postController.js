@@ -34,9 +34,9 @@ export const getPosts = asyncHandler(async (req, res) => {
 // @route       GET /api/v1/posts/:category
 // @access      Private / Admin
 export const getPostsByCategory = asyncHandler(async (req, res, next) => {
-    const postCategory = req.params.replace(/\s+/g, "").toLowerCase();
+    const postCategory = req.params.category.replace(/\s+/g, "").toLowerCase();
     const posts = await Post.find({
-        category: req.params.replace(/\s+/g, "").toLowerCase(),
+        category: postCategory,
     }).exec();
 
     if (!posts) {
