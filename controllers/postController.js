@@ -7,7 +7,6 @@ import Post from "../models/Post.js";
 export const getPosts = asyncHandler(async (req, res) => {
     const pageSize = 10;
     const page = Number(req.query.pageNumber) || 1;
-
     const keyword = req.query.keyword
         ? {
               name: {
@@ -16,13 +15,10 @@ export const getPosts = asyncHandler(async (req, res) => {
               },
           }
         : {};
-
     const count = await Post.countDocuments({ ...keyword });
-
     const posts = await Post.find({ ...keyword })
         .limit(pageSize)
         .skip(pageSize * (page - 1));
-
     res.status(200).json({
         posts,
         page,
@@ -38,7 +34,12 @@ export const getPostsByCategory = asyncHandler(async (req, res, next) => {
     const posts = await Post.find({
         category: postCategory,
     })
-        .populate("comments")
+        .populate({
+            path: "comments",
+            populate: {
+                path: "author",
+            },
+        })
         .exec();
 
     if (!posts) {
@@ -57,21 +58,17 @@ export const getPostsByCategory = asyncHandler(async (req, res, next) => {
 // @route       GET /api/v1/posts/:id
 // @access      Private / Admin
 export const getPost = asyncHandler(async (req, res, next) => {
-    const post = await Post.findById(req.params.postId)
-        .populate("comments")
-        .exec();
+    const post = await Post.findById(req.params.id).populate("comments").exec();
 
     if (!post) {
-        if (!post) {
-            return next(
-                new ErrorResponse(
-                    `Post that ends with '${accountToRemoveId.slice(
-                        -6
-                    )}' was not found`,
-                    404
-                )
-            );
-        }
+        return next(
+            new ErrorResponse(
+                `Post that ends with '${accountToRemoveId.slice(
+                    -6
+                )}' was not found`,
+                404
+            )
+        );
     }
 
     res.status(200).json(post);

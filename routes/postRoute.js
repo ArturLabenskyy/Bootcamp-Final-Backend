@@ -13,16 +13,18 @@ import asyncHandler from "../middleware/asyncHandler.js";
 const router = express.Router({ mergeParams: true });
 
 router
-    .route("/")
-    .get(asyncHandler(getPosts))
-    .post(protect, asyncHandler(createPost));
-router
-    .route("/category/:category")
-    .get(protect, asyncHandler(getPostsByCategory));
-router
-    .route("/:postId")
+    .route("/:id")
     .get(protect, asyncHandler(getPost))
     .put(protect, asyncHandler(updatePost))
     .delete(protect, asyncHandler(deletePost));
+
+router
+    .route("/")
+    .get(protect, asyncHandler(getPosts))
+    .post(protect, asyncHandler(createPost));
+
+router
+    .route("/category/:category")
+    .get(protect, asyncHandler(getPostsByCategory));
 
 export default router;

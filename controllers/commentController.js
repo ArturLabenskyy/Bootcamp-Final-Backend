@@ -5,10 +5,9 @@ import Post from "../models/Post.js";
 // @desc        Get all comments
 // @route       GET /api/v1/comments
 // @access      Public
-export const getComments = asyncHandler(async (req, res) => {
+export const getAllComments = asyncHandler(async (req, res, next) => {
     const pageSize = 10;
     const page = Number(req.query.pageNumber) || 1;
-
     const keyword = req.query.keyword
         ? {
               name: {
@@ -17,13 +16,10 @@ export const getComments = asyncHandler(async (req, res) => {
               },
           }
         : {};
-
     const count = await Comment.countDocuments({ ...keyword });
-
     const comments = await Comment.find({ ...keyword })
         .limit(pageSize)
         .skip(pageSize * (page - 1));
-
     res.status(200).json({
         comments,
         page,
@@ -54,21 +50,15 @@ export const getCommentsByPost = asyncHandler(async (req, res, next) => {
 // @desc        Get single comment
 // @route       GET /api/v1/comments/:id
 // @access      Private / Admin
-export const getComment = asyncHandler(async (req, res, next) => {
-    const comment = await Comment.findById(req.params.id)
-        .populate("author")
-        .exec();
+export const getComment = asyncHandler(async (req, res) => {
+    const comment = await Comment.findById(req.params.id);
 
-    if (!comment) {
-        return next(
-            new ErrorResponse(
-                `Comment with id ${req.params.id} was not found`,
-                404
-            )
-        );
+    if (comment) {
+        res.status(200).json(comment);
+    } else {
+        res.status(404);
+        throw new Error("Comment not found");
     }
-
-    res.status(200).json(comment);
 });
 
 // @desc        Create comment
