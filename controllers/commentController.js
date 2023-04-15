@@ -35,7 +35,9 @@ export const getComments = asyncHandler(async (req, res) => {
 // @route       GET /api/v1/comments/post/:postId
 // @access      Private / Admin
 export const getCommentsByPost = asyncHandler(async (req, res, next) => {
-    const comments = await Comment.find({ post: req.params.postId }).exec();
+    const comments = await Comment.find({ post: req.params.postId })
+        .populate("author")
+        .exec();
 
     if (!comments) {
         return next(
@@ -53,7 +55,9 @@ export const getCommentsByPost = asyncHandler(async (req, res, next) => {
 // @route       GET /api/v1/comments/:id
 // @access      Private / Admin
 export const getComment = asyncHandler(async (req, res, next) => {
-    const comment = await Comment.findById(req.params.id).exec();
+    const comment = await Comment.findById(req.params.id)
+        .populate("author")
+        .exec();
 
     if (!comment) {
         return next(
