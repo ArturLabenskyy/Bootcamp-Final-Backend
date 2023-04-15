@@ -2,6 +2,7 @@ import express from "express";
 import {
     createComment,
     getComment,
+    getComments,
     updateComment,
     deleteComment,
     getCommentsByPost,
@@ -11,7 +12,7 @@ import asyncHandler from "../middleware/asyncHandler.js";
 
 const router = express.Router();
 
-router.route("/").post(protect, createComment);
+router.route("/").get(protect, getComments).post(protect, createComment);
 router
     .route("/:commentId")
     .get(protect, asyncHandler(getComment))
