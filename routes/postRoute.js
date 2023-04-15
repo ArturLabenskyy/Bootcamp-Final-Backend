@@ -16,7 +16,9 @@ router
     .route("/")
     .get(asyncHandler(getPosts))
     .post(protect, asyncHandler(createPost));
-router.route("/:category").get(protect, asyncHandler(getPostsByCategory));
+router
+    .route("/category/:category")
+    .get(protect, asyncHandler(getPostsByCategory));
 router
     .route("/:postId")
     .get(protect, asyncHandler(getPost))

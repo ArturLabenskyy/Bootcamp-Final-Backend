@@ -32,7 +32,7 @@ export const getComments = asyncHandler(async (req, res) => {
 });
 
 // @desc        Get all comments by specific post
-// @route       GET /api/v1/comments/:postId
+// @route       GET /api/v1/comments/post/:postId
 // @access      Private / Admin
 export const getCommentsByPost = asyncHandler(async (req, res, next) => {
     const comments = await Comment.find({ post: req.params.postId }).exec();

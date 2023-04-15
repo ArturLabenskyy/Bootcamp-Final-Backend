@@ -31,13 +31,15 @@ export const getPosts = asyncHandler(async (req, res) => {
 });
 
 // @desc        Get all posts by specific category
-// @route       GET /api/v1/posts/:category
+// @route       GET /api/v1/posts/category/:category
 // @access      Private / Admin
 export const getPostsByCategory = asyncHandler(async (req, res, next) => {
     const postCategory = req.params.category.replace(/\s+/g, "").toLowerCase();
     const posts = await Post.find({
         category: postCategory,
-    }).exec();
+    })
+        .populate("comments")
+        .exec();
 
     if (!posts) {
         return next(
@@ -55,7 +57,9 @@ export const getPostsByCategory = asyncHandler(async (req, res, next) => {
 // @route       GET /api/v1/posts/:id
 // @access      Private / Admin
 export const getPost = asyncHandler(async (req, res, next) => {
-    const post = await Post.findById(req.params.postId).exec();
+    const post = await Post.findById(req.params.postId)
+        .populate("comments")
+        .exec();
 
     if (!post) {
         if (!post) {

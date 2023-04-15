@@ -17,6 +17,6 @@ router
     .get(protect, asyncHandler(getComment))
     .put(protect, asyncHandler(updateComment))
     .delete(protect, asyncHandler(deleteComment));
-router.route("/:postId").get(protect, asyncHandler(getCommentsByPost));
+router.route("/post/:postId").get(protect, asyncHandler(getCommentsByPost));
 
 export default router;
