@@ -34,11 +34,12 @@ export const getPostsByCategory = asyncHandler(async (req, res, next) => {
     const posts = await Post.find({
         category: postCategory,
     })
-        .populate("author")
+        .populate({ path: "author", select: "_id name" })
         .populate({
             path: "comments",
             populate: {
                 path: "author",
+                select: "_id name",
             },
         })
         .exec();

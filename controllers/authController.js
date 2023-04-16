@@ -77,7 +77,7 @@ export const logout = asyncHandler(async (req, res, next) => {
 // @route   GET /api/v1/auth/current-user
 // @access  Private
 export const getCurrentUser = asyncHandler(async (req, res, next) => {
-    const user = await User.findById(req.user.id);
+    const user = await User.findById(req.user.id).select("_id name ");
 
     res.status(200).json({
         success: true,
