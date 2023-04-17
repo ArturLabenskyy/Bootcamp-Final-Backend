@@ -1,5 +1,6 @@
 import asyncHandler from "../middleware/asyncHandler.js";
 import Post from "../models/Post.js";
+import Comment from "../models/Comment.js";
 
 // @desc        Get all posts
 // @route       GET /api/v1/posts
